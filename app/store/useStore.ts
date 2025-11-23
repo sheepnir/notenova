@@ -15,6 +15,7 @@ interface StoreState {
   viewMode: ViewMode;
   searchQuery: string;
   sidebarCollapsed: boolean;
+  isSaving: boolean;
 
   // Actions - Notes
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => Note;
@@ -38,6 +39,7 @@ interface StoreState {
   setViewMode: (mode: ViewMode) => void;
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
+  setIsSaving: (isSaving: boolean) => void;
 
   // Actions - Data Management
   loadData: () => void;
@@ -55,6 +57,7 @@ export const useStore = create<StoreState>((set, get) => ({
   viewMode: 'all',
   searchQuery: '',
   sidebarCollapsed: false,
+  isSaving: false,
 
   // Notes Actions
   addNote: (noteData) => {
@@ -200,6 +203,7 @@ export const useStore = create<StoreState>((set, get) => ({
   setViewMode: (mode) => set({ viewMode: mode }),
   setSearchQuery: (query) => set({ searchQuery: query }),
   toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+  setIsSaving: (isSaving) => set({ isSaving }),
 
   // Data Management
   loadData: () => {

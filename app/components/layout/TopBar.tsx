@@ -2,10 +2,22 @@
 
 import { Search, Plus, Menu } from 'lucide-react';
 import { useStore } from '@/app/store/useStore';
+import { useRef, useImperativeHandle, forwardRef } from 'react';
 import Button from '../ui/Button';
 
-export default function TopBar() {
+export interface TopBarRef {
+  focusSearch: () => void;
+}
+
+const TopBar = forwardRef<TopBarRef>((props, ref) => {
   const { searchQuery, setSearchQuery, addNote, toggleSidebar, sidebarCollapsed } = useStore();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    focusSearch: () => {
+      searchInputRef.current?.focus();
+    },
+  }));
 
   const handleNewNote = () => {
     const newNote = addNote({
@@ -39,6 +51,7 @@ export default function TopBar() {
         <div className="relative flex-1 max-w-md">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-white-muted)]" />
           <input
+            ref={searchInputRef}
             type="text"
             placeholder="Search notes..."
             value={searchQuery}
@@ -56,4 +69,8 @@ export default function TopBar() {
       </div>
     </div>
   );
-}
+});
+
+TopBar.displayName = 'TopBar';
+
+export default TopBar;

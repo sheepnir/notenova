@@ -1,9 +1,10 @@
-import { Note, Folder, Tag } from '@/app/types';
+import { Note, Folder, Tag, Theme } from '@/app/types';
 
 const STORAGE_KEYS = {
   NOTES: 'notenova_notes',
   FOLDERS: 'notenova_folders',
   TAGS: 'notenova_tags',
+  THEME: 'notenova_theme',
 };
 
 // Safe localStorage access with SSR support
@@ -62,12 +63,25 @@ export const storage = {
     localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(tags));
   },
 
+  // Theme
+  getTheme: (): Theme => {
+    if (!isClient) return 'dark';
+    const theme = localStorage.getItem(STORAGE_KEYS.THEME);
+    return (theme === 'light' || theme === 'dark') ? theme : 'dark';
+  },
+
+  saveTheme: (theme: Theme): void => {
+    if (!isClient) return;
+    localStorage.setItem(STORAGE_KEYS.THEME, theme);
+  },
+
   // Clear all data
   clearAll: (): void => {
     if (!isClient) return;
     localStorage.removeItem(STORAGE_KEYS.NOTES);
     localStorage.removeItem(STORAGE_KEYS.FOLDERS);
     localStorage.removeItem(STORAGE_KEYS.TAGS);
+    localStorage.removeItem(STORAGE_KEYS.THEME);
   },
 };
 

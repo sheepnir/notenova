@@ -14,8 +14,10 @@ import {
   X,
 } from 'lucide-react';
 import Button from '../ui/Button';
+import InputDialog from '../ui/InputDialog';
 
 export default function Sidebar() {
+  const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
   const {
     folders,
     tags,
@@ -44,16 +46,17 @@ export default function Sidebar() {
   };
 
   const handleNewFolder = () => {
-    const name = prompt('Folder name:');
-    if (name) {
-      addFolder({
-        name,
-        parentId: null,
-        icon: '📁',
-        color: '#7c3aed',
-        position: folders.length,
-      });
-    }
+    setShowNewFolderDialog(true);
+  };
+
+  const createFolder = (name: string) => {
+    addFolder({
+      name,
+      parentId: null,
+      icon: '📁',
+      color: '#7c3aed',
+      position: folders.length,
+    });
   };
 
   if (sidebarCollapsed) {
@@ -185,6 +188,21 @@ export default function Sidebar() {
           <p className="text-[var(--color-violet-primary)]">✨ NoteNova</p>
         </div>
       </div>
+
+      {/* New Folder Dialog */}
+      <InputDialog
+        isOpen={showNewFolderDialog}
+        onClose={() => setShowNewFolderDialog(false)}
+        onConfirm={createFolder}
+        title="Create Folder"
+        label="Folder Name"
+        placeholder="Enter folder name"
+        confirmText="Create"
+        validate={(value) => {
+          if (!value.trim()) return 'Folder name cannot be empty';
+          return null;
+        }}
+      />
     </aside>
   );
 }

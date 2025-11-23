@@ -7,16 +7,18 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useStore } from '@/app/store/useStore';
 import EditorToolbar from './EditorToolbar';
 import AIModal from '../ai/AIModal';
 import AIFloatingButton from '../ai/AIFloatingButton';
+import SaveStatus from '../ui/SaveStatus';
 import './editor.css';
 
 export default function Editor() {
-  const { notes, activeNoteId, updateNote } = useStore();
+  const { notes, activeNoteId, updateNote, setIsSaving } = useStore();
   const activeNote = notes.find((n) => n.id === activeNoteId);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -61,9 +63,19 @@ export default function Editor() {
     onUpdate: ({ editor }) => {
       if (activeNote) {
         const content = JSON.stringify(editor.getJSON());
+
+        // Set saving state
+        setIsSaving(true);
+
+        // Clear existing timeout
+        if (saveTimeoutRef.current) {
+          clearTimeout(saveTimeoutRef.current);
+        }
+
         // Debounced auto-save
-        setTimeout(() => {
+        saveTimeoutRef.current = setTimeout(() => {
           updateNote(activeNote.id, { content });
+          setIsSaving(false);
         }, 500);
       }
     },
@@ -83,6 +95,15 @@ export default function Editor() {
       editor.commands.setContent('');
     }
   }, [activeNoteId, editor]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Handle AI result acceptance
   const handleAcceptAIResult = (result: string, action: 'replace' | 'insert') => {
@@ -119,6 +140,7 @@ export default function Editor() {
         />
         <div className="flex items-center gap-4 mt-2 text-sm text-[var(--color-white-muted)]">
           <span>Last edited {new Date(activeNote.updatedAt).toLocaleString()}</span>
+          <SaveStatus />
         </div>
       </div>
 

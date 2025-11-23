@@ -16,6 +16,7 @@ interface StoreState {
   searchQuery: string;
   sidebarCollapsed: boolean;
   theme: Theme;
+  isSaving: boolean;
 
   // Actions - Notes
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => Note;
@@ -40,6 +41,7 @@ interface StoreState {
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
   setTheme: (theme: Theme) => void;
+  setIsSaving: (isSaving: boolean) => void;
 
   // Actions - Data Management
   loadData: () => void;
@@ -58,6 +60,7 @@ export const useStore = create<StoreState>((set, get) => ({
   searchQuery: '',
   sidebarCollapsed: false,
   theme: storage.getTheme(),
+  isSaving: false,
 
   // Notes Actions
   addNote: (noteData) => {
@@ -207,6 +210,7 @@ export const useStore = create<StoreState>((set, get) => ({
     storage.saveTheme(theme);
     set({ theme });
   },
+  setIsSaving: (isSaving) => set({ isSaving }),
 
   // Data Management
   loadData: () => {

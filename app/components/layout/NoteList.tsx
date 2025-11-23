@@ -1,10 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { useStore } from '@/app/store/useStore';
 import { Star, Tag, Folder, Trash2 } from 'lucide-react';
 import { Note } from '@/app/types';
+import ConfirmDialog from '../ui/ConfirmDialog';
 
 export default function NoteList() {
+  const [noteToDelete, setNoteToDelete] = useState<Note | null>(null);
   const {
     notes,
     folders,
@@ -68,8 +71,13 @@ export default function NoteList() {
 
   const handleDelete = (note: Note, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm(`Delete "${note.title}"?`)) {
-      deleteNote(note.id);
+    setNoteToDelete(note);
+  };
+
+  const confirmDelete = () => {
+    if (noteToDelete) {
+      deleteNote(noteToDelete.id);
+      setNoteToDelete(null);
     }
   };
 
@@ -121,6 +129,17 @@ export default function NoteList() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!noteToDelete}
+        onClose={() => setNoteToDelete(null)}
+        onConfirm={confirmDelete}
+        title="Delete Note"
+        message={`Are you sure you want to delete "${noteToDelete?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        variant="danger"
+      />
     </div>
   );
 }

@@ -55,11 +55,11 @@
   --foreground: var(--color-white-primary);
 }
 
-/* Cosmic Day Theme Colors (Light Mode) */
+/* Light Mode - Black & White Theme */
 [data-theme="light"] {
-  /* Light Backgrounds */
-  --color-space-darkest: #faf9fc;
-  --color-space-dark: #f5f3ff;
+  /* White Backgrounds */
+  --color-space-darkest: #f9fafb;
+  --color-space-dark: #ffffff;
   --color-space-elevated: #ffffff;
 
   /* Primary - Keep violet brand */
@@ -67,32 +67,32 @@
   --color-violet-hover: #6d28d9;
   --color-violet-active: #5b21b6;
 
-  /* Borders & Accents */
-  --color-lavender-border: #e9d5ff;
-  --color-lavender-subtle: #f3e8ff;
-  --color-lavender-light: #faf5ff;
+  /* Borders & Accents - Neutral grays */
+  --color-lavender-border: #e5e7eb;
+  --color-lavender-subtle: #f3f4f6;
+  --color-lavender-light: #f9fafb;
 
-  /* Secondary */
+  /* Secondary - Keep same */
   --color-blue-dark: #818cf8;
   --color-blue-deep: #6366f1;
   --color-blue-bright: #4f46e5;
 
-  /* Dark Text */
-  --color-white-primary: #1e1b4b;
-  --color-white-off: #2d1b4e;
-  --color-white-secondary: #4c1d95;
+  /* Black Text */
+  --color-white-primary: #111827;
+  --color-white-off: #1f2937;
+  --color-white-secondary: #374151;
   --color-white-muted: #6b7280;
 
-  /* Accents */
+  /* Accents - Keep same */
   --color-pink-accent: #ec4899;
   --color-pink-light: #f472b6;
   --color-pink-lighter: #fce7f3;
 
-  /* Info */
+  /* Info - Keep same */
   --color-teal: #0891b2;
   --color-teal-light: #06b6d4;
 
-  /* Functional */
+  /* Functional - Keep same */
   --color-success: #059669;
   --color-success-hover: #10b981;
   --color-success-light: #34d399;

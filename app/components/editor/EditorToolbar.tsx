@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Editor } from '@tiptap/react';
 import {
   Bold,
@@ -19,29 +20,48 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import AIToolbar from '../ai/AIToolbar';
+import InputDialog from '../ui/InputDialog';
 
 interface EditorToolbarProps {
   editor: Editor;
 }
 
+type DialogType = 'link' | 'image' | null;
+
 export default function EditorToolbar({ editor }: EditorToolbarProps) {
+  const [dialogType, setDialogType] = useState<DialogType>(null);
+
   const addImage = () => {
-    const url = prompt('Enter image URL:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
+    setDialogType('image');
   };
 
   const addLink = () => {
-    const url = prompt('Enter URL:');
-    if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
+    setDialogType('link');
+  };
+
+  const handleDialogConfirm = (value: string) => {
+    if (dialogType === 'image') {
+      editor.chain().focus().setImage({ src: value }).run();
+    } else if (dialogType === 'link') {
+      editor.chain().focus().setLink({ href: value }).run();
+    }
+    setDialogType(null);
+  };
+
+  const validateURL = (value: string) => {
+    if (!value.trim()) return 'URL cannot be empty';
+    try {
+      new URL(value);
+      return null;
+    } catch {
+      return 'Please enter a valid URL';
     }
   };
 
   return (
-    <div className="sticky top-0 z-10 border-b border-[rgba(196,181,253,0.1)] bg-[var(--color-space-dark)] px-16 py-3">
-      <div className="flex items-center gap-1 flex-wrap">
+    <>
+      <div className="sticky top-0 z-10 border-b border-[rgba(196,181,253,0.1)] bg-[var(--color-space-dark)] px-16 py-3">
+        <div className="flex items-center gap-1 flex-wrap">
         {/* Text Formatting */}
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -148,8 +168,21 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
         {/* AI */}
         <AIToolbar editor={editor} />
+        </div>
       </div>
-    </div>
+
+      {/* Link/Image Input Dialog */}
+      <InputDialog
+        isOpen={dialogType !== null}
+        onClose={() => setDialogType(null)}
+        onConfirm={handleDialogConfirm}
+        title={dialogType === 'link' ? 'Add Link' : 'Add Image'}
+        label={dialogType === 'link' ? 'Link URL' : 'Image URL'}
+        placeholder={dialogType === 'link' ? 'https://example.com' : 'https://example.com/image.jpg'}
+        confirmText="Add"
+        validate={validateURL}
+      />
+    </>
   );
 }
 

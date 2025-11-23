@@ -5,15 +5,15 @@ import { useStore } from '@/app/store/useStore';
 
 interface UseKeyboardShortcutsProps {
   onFocusSearch?: () => void;
+  onDeleteNote?: (noteId: string, noteTitle: string) => void;
 }
 
-export function useKeyboardShortcuts({ onFocusSearch }: UseKeyboardShortcutsProps = {}) {
+export function useKeyboardShortcuts({ onFocusSearch, onDeleteNote }: UseKeyboardShortcutsProps = {}) {
   const {
     notes,
     activeNoteId,
     addNote,
     updateNote,
-    deleteNote,
     setActiveNote,
     toggleSidebar,
     setSearchQuery,
@@ -78,10 +78,10 @@ export function useKeyboardShortcuts({ onFocusSearch }: UseKeyboardShortcutsProp
       // Cmd/Ctrl + Delete/Backspace: Delete active note
       if (modKey && (e.key === 'Delete' || e.key === 'Backspace') && !isTyping) {
         e.preventDefault();
-        if (activeNoteId) {
+        if (activeNoteId && onDeleteNote) {
           const activeNote = notes.find((n) => n.id === activeNoteId);
-          if (activeNote && confirm(`Delete "${activeNote.title}"?`)) {
-            deleteNote(activeNoteId);
+          if (activeNote) {
+            onDeleteNote(activeNoteId, activeNote.title);
           }
         }
         return;
@@ -142,7 +142,6 @@ export function useKeyboardShortcuts({ onFocusSearch }: UseKeyboardShortcutsProp
     activeNoteId,
     addNote,
     updateNote,
-    deleteNote,
     setActiveNote,
     toggleSidebar,
     setSearchQuery,
@@ -151,5 +150,6 @@ export function useKeyboardShortcuts({ onFocusSearch }: UseKeyboardShortcutsProp
     activeFolderId,
     activeTagId,
     onFocusSearch,
+    onDeleteNote,
   ]);
 }

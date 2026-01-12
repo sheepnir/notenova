@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Note, Folder, Tag, ViewMode } from '@/app/types';
+import { Note, Folder, Tag, ViewMode, Theme } from '@/app/types';
 import { storage } from '@/app/lib/storage';
 
 interface StoreState {
@@ -15,6 +15,7 @@ interface StoreState {
   viewMode: ViewMode;
   searchQuery: string;
   sidebarCollapsed: boolean;
+  theme: Theme;
   isSaving: boolean;
 
   // Actions - Notes
@@ -39,6 +40,7 @@ interface StoreState {
   setViewMode: (mode: ViewMode) => void;
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
+  setTheme: (theme: Theme) => void;
   setIsSaving: (isSaving: boolean) => void;
 
   // Actions - Data Management
@@ -57,6 +59,7 @@ export const useStore = create<StoreState>((set, get) => ({
   viewMode: 'all',
   searchQuery: '',
   sidebarCollapsed: false,
+  theme: storage.getTheme(),
   isSaving: false,
 
   // Notes Actions
@@ -203,6 +206,10 @@ export const useStore = create<StoreState>((set, get) => ({
   setViewMode: (mode) => set({ viewMode: mode }),
   setSearchQuery: (query) => set({ searchQuery: query }),
   toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+  setTheme: (theme) => {
+    storage.saveTheme(theme);
+    set({ theme });
+  },
   setIsSaving: (isSaving) => set({ isSaving }),
 
   // Data Management

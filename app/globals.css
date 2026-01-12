@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Cosmic Night Theme Colors */
+/* Cosmic Night Theme Colors (Dark Mode - Default) */
 :root {
   /* Deep Space Purple (Backgrounds) */
   --color-space-darkest: #0A0118;
@@ -49,6 +49,59 @@
   /* Error (Supernova Red) */
   --color-error: #ef4444;
   --color-error-light: #f87171;
+
+  /* Semantic mappings */
+  --background: var(--color-space-dark);
+  --foreground: var(--color-white-primary);
+}
+
+/* Light Mode - Black & White Theme */
+[data-theme="light"] {
+  /* White Backgrounds */
+  --color-space-darkest: #f9fafb;
+  --color-space-dark: #ffffff;
+  --color-space-elevated: #ffffff;
+
+  /* Primary - Keep violet brand */
+  --color-violet-primary: #7c3aed;
+  --color-violet-hover: #6d28d9;
+  --color-violet-active: #5b21b6;
+
+  /* Borders & Accents - Neutral grays */
+  --color-lavender-border: #e5e7eb;
+  --color-lavender-subtle: #f3f4f6;
+  --color-lavender-light: #f9fafb;
+
+  /* Secondary - Keep same */
+  --color-blue-dark: #818cf8;
+  --color-blue-deep: #6366f1;
+  --color-blue-bright: #4f46e5;
+
+  /* Black Text */
+  --color-white-primary: #111827;
+  --color-white-off: #1f2937;
+  --color-white-secondary: #374151;
+  --color-white-muted: #6b7280;
+
+  /* Accents - Keep same */
+  --color-pink-accent: #ec4899;
+  --color-pink-light: #f472b6;
+  --color-pink-lighter: #fce7f3;
+
+  /* Info - Keep same */
+  --color-teal: #0891b2;
+  --color-teal-light: #06b6d4;
+
+  /* Functional - Keep same */
+  --color-success: #059669;
+  --color-success-hover: #10b981;
+  --color-success-light: #34d399;
+
+  --color-warning: #d97706;
+  --color-warning-light: #f59e0b;
+
+  --color-error: #dc2626;
+  --color-error-light: #ef4444;
 
   /* Semantic mappings */
   --background: var(--color-space-dark);
@@ -118,6 +171,7 @@
 /* Global Styles */
 * {
   border-color: rgba(196, 181, 253, 0.1);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 body {

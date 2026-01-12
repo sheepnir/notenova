@@ -28,6 +28,8 @@ export interface Tag {
 
 export type ViewMode = 'all' | 'folder' | 'favorites' | 'recent' | 'tag';
 
+export type Theme = 'dark' | 'light';
+
 export interface AppState {
   notes: Note[];
   folders: Folder[];

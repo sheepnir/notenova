@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, Plus, Menu } from 'lucide-react';
+import { Search, Plus, Menu, Sun, Moon } from 'lucide-react';
 import { useStore } from '@/app/store/useStore';
 import { useRef, useImperativeHandle, forwardRef } from 'react';
 import Button from '../ui/Button';
@@ -10,7 +10,7 @@ export interface TopBarRef {
 }
 
 const TopBar = forwardRef<TopBarRef>((props, ref) => {
-  const { searchQuery, setSearchQuery, addNote, toggleSidebar, sidebarCollapsed } = useStore();
+  const { searchQuery, setSearchQuery, addNote, toggleSidebar, sidebarCollapsed, theme, setTheme } = useStore();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useImperativeHandle(ref, () => ({
@@ -62,6 +62,17 @@ const TopBar = forwardRef<TopBarRef>((props, ref) => {
       </div>
 
       <div className="flex items-center gap-3">
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="p-2 hover:bg-[rgba(255,255,255,0.05)] rounded-lg transition-colors"
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? (
+            <Sun size={20} className="text-[var(--color-white-primary)]" />
+          ) : (
+            <Moon size={20} className="text-[var(--color-white-primary)]" />
+          )}
+        </button>
         <Button size="sm" onClick={handleNewNote}>
           <Plus size={18} />
           New Note
